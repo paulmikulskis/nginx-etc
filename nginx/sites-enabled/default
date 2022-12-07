@@ -65,12 +65,13 @@ server {
 	client_max_body_size 3000M;
         
         location '/.well-known/acme-challenge' {
+                client_max_body_size 3000M;
                 default_type "text/plain";
                 root /var/www/html;
         }
         
         location / {
-                client_max_body_size 3000M
+                client_max_body_size 3000M;
                 proxy_pass http://localhost:5000;
                 proxy_set_header Host $host;
         }
