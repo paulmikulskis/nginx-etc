@@ -15,5 +15,6 @@ registry:
 		-e ENV_DOCKER_REGISTRY_HOST=registry.yungstentech.com \
 		-e ENV_DOCKER_REGISTRY_PORT=443 \
 		-e ENV_DOCKER_REGISTRY_USE_SSL=1 \
+		-e ENV_MODE_BROWSE_ONLY=true \
 		-p 8080:80 \
 		konradkleine/docker-registry-frontend:v2
