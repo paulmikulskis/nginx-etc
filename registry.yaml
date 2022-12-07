@@ -11,7 +11,7 @@ loglevel: debug # deprecated: use "log"
 storage:
   filesystem:
     rootdirectory: /var/lib/registry
-    maxthreads: 2
+    maxthreads: 100
   # s3:
   #   accesskey: awsaccesskey
   #   secretkey: awssecretkey
