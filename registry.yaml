@@ -1,0 +1,61 @@
+version: 0.1
+log:
+  accesslog:
+    disabled: false
+  level: debug
+  formatter: text
+  fields:
+    service: registry
+    environment: production
+loglevel: debug # deprecated: use "log"
+storage:
+  filesystem:
+    rootdirectory: /var/lib/registry
+    maxthreads: 2
+  # s3:
+  #   accesskey: awsaccesskey
+  #   secretkey: awssecretkey
+  #   region: us-west-1
+  #   regionendpoint: http://myobjects.local
+  #   forcepathstyle: true
+  #   accelerate: false
+  #   bucket: bucketname
+  #   encrypt: true
+  #   keyid: mykeyid
+  #   secure: true
+  #   v4auth: true
+  #   chunksize: 5242880
+  #   multipartcopychunksize: 33554432
+  #   multipartcopymaxconcurrency: 100
+  #   multipartcopythresholdsize: 33554432
+  #   rootdirectory: /s3/object/name/prefix
+  #   usedualstack: false
+  delete:
+    enabled: false
+  redirect:
+    disable: false
+http:
+  addr: 127.0.0.1:5000
+  host: https://registry.yungstentech.com
+  # secret: asecretforlocaldevelopment
+  relativeurls: false
+  draintimeout: 60s
+  # tls:
+  #   certificate: /path/to/x509/public
+  #   key: /path/to/x509/private
+  #   clientcas:
+  #     - /path/to/ca.pem
+  #     - /path/to/another/ca.pem
+  #   letsencrypt:
+  #     cachefile: /path/to/cache-file
+  #     email: emailused@letsencrypt.com
+  #     hosts: [myregistryaddress.org]
+  debug:
+    addr: 127.0.0.1:5001
+    prometheus:
+      enabled: true
+      path: /metrics
+  headers:
+    X-Content-Type-Options: [nosniff]
+  http2:
+    disabled: false
