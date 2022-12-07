@@ -35,7 +35,7 @@ storage:
   redirect:
     disable: false
 http:
-  addr: 127.0.0.1:5000
+  addr: localhost:5000
   host: https://registry.yungstentech.com
   # secret: asecretforlocaldevelopment
   relativeurls: false
@@ -51,7 +51,7 @@ http:
   #     email: emailused@letsencrypt.com
   #     hosts: [myregistryaddress.org]
   debug:
-    addr: 127.0.0.1:5001
+    addr: localhost:5001
     prometheus:
       enabled: true
       path: /metrics
