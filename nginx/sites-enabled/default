@@ -62,7 +62,7 @@ server {
 
         ssl_session_cache shared:SSL:10m;
         ssl_session_timeout 10m;
-        client_max_body_size 0;
+	client_max_body_size 3000M;
         
         location '/.well-known/acme-challenge' {
                 default_type "text/plain";
