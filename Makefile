@@ -9,4 +9,11 @@ registry:
 		-d -p 5000:5000 --restart=always --name registry \
     -v `pwd`/registry.yaml:/etc/docker/registry/config.yml \
 		-v /var/lib/registry:/var/lib/registry \
-    registry:2
+    registry:2 && \
+	docker run \
+		-d \
+		-e ENV_DOCKER_REGISTRY_HOST=registry.yungstentech.com \
+		-e ENV_DOCKER_REGISTRY_PORT=443 \
+		-e ENV_DOCKER_REGISTRY_USE_SSL=1 \
+		-p 8080:80 \
+		konradkleine/docker-registry-frontend:v2
