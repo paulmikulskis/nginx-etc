@@ -95,7 +95,7 @@ server {
                 proxy_set_header  Authorization  ""; # see https://github.com/dotcloud/docker-registry/issues/170
                 proxy_read_timeout               120s;
                 reset_timedout_connection 	 on;
-                proxy_pass http://127.0.0.1:8080/;  # note the trailing slash here, it matters!
+                proxy_pass http://localhost:8080/;  # note the trailing slash here, it matters!
         }
 
         location /debug {
