@@ -8,4 +8,5 @@ registry:
 	docker rm --force registry && docker run -e REGISTRY_HTTP_HOST=https://registry.yungstentech.com \
 		-d -p 5000:5000 --restart=always --name registry \
     -v `pwd`/registry.yaml:/etc/docker/registry/config.yml \
+		-v /var/lib/registry:/var/lib/registry \
     registry:2
