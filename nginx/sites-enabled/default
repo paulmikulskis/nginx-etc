@@ -69,12 +69,12 @@ server {
         }
         
         location / {
-                proxy_pass http://127.0.0.1:5000;
+                proxy_pass localhost:5000;
                 proxy_set_header Host $host;
         }
 
         location /debug {
-                proxy_pass http://127.0.0.1:5001;
+                proxy_pass localhost:5001;
                 proxy_set_header Host $host;
         }
 }
