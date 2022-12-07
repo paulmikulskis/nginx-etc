@@ -10,7 +10,7 @@ registry:
     -v `pwd`/registry.yaml:/etc/docker/registry/config.yml \
 		-v /var/lib/registry:/var/lib/registry \
     registry:2 && \
-	docker run \
+	docker rm --force docker-registry-frontend && docker run \
 		-d \
 		-e ENV_DOCKER_REGISTRY_HOST=registry.yungstentech.com \
 		-e ENV_DOCKER_REGISTRY_PORT=443 \
