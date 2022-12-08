@@ -17,14 +17,14 @@ healthchecks-superuser:
 
 healthchecks:
 	make healthchecks-env && \
-	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
-	sleep 10 && \
-	make healthchecks-superuser
+	docker compose -f healthchecks/docker/docker-compose.yml up -ENV_DOCKER_REGISTRY_HOST
 
 healthchecks-clean:
 	make healthchecks-env && \
 	docker compose -f healthchecks/docker/docker-compose.yml down -v && \
-	make healthchecks
+	make healthchecks && \
+	sleep 10 && \
+	make healthchecks-superuser
 
 nginx:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
