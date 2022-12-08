@@ -1,15 +1,20 @@
-.PHONY: install healthchecks all
+.PHONY: install healthchecks all healthchecks-superuser
 
 all:
 	make install && make registry && make healthchecks
 
 healthchecks:
-	cp healthchecks.env healthchecks/docker && \
-	cd healthchecks/docker && docker compose up -d
+	cp healthchecks.env healthchecks/docker/.env && \
+	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
+	make healthchecks-superuser
+
+healthchecks-superuser:
+	sleep 10 && \
+  docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('paul', 'mikulskisp@gmail.com', '1234count!' )"
 
 healthchecks-clean:
-	cp healthchecks.env healthchecks/docker && \
-	cd healthchecks/docker && docker compose down -v && docker compose up -d
+	docker compose -f healthchecks/docker/docker-compose.yml down -v && \
+	make healthchecks
 
 install:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
@@ -28,3 +33,4 @@ registry:
 		-e ENV_DOCKER_REGISTRY_USE_SSL=1 \
 		-p 8080:80 \
 		konradkleine/docker-registry-frontend:v2
+		
