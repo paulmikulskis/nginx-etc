@@ -1,7 +1,7 @@
-.PHONY: install healthchecks all healthchecks-superuser
+.PHONY: nginx healthchecks all healthchecks-superuser
 
 all:
-	make install && make registry && make healthchecks
+	make nginx && make registry && make healthchecks
 
 healthchecks:
 	export $(cat healthchecks.env | xargs) && \
@@ -11,13 +11,15 @@ healthchecks:
 
 healthchecks-superuser:
 	sleep 10 && \
-  docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
+  docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py \
+	shell -c \
+	"from django.contrib.auth.models import User; User.objects.create_superuser('admin', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
 
 healthchecks-clean:
 	docker compose -f healthchecks/docker/docker-compose.yml down -v && \
 	make healthchecks
 
-install:
+nginx:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
 
 registry:
