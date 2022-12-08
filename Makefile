@@ -4,7 +4,12 @@ all:
 	make install && make registry && make healthchecks
 
 healthchecks:
-	cd healthchecks && docker compose up -d
+	cp healthchecks.env healthchecks/docker && \
+	cd healthchecks/docker && docker compose up -d
+
+healthchecks-clean:
+	cp healthchecks.env healthchecks/docker && \
+	cd healthchecks/docker && docker compose down -v && docker compose up -d
 
 install:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
