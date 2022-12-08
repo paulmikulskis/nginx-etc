@@ -3,10 +3,12 @@
 function deployHealthchecks(){
   export $(grep -v '^#' healthchecks.env | xargs)
   make healthchecks > healthcheck.deploy.log 2> healthcheck.deploy.log
+  exit 0
 }
 
 function deployNginx(){
   make nginx
+  exit 0
 }
 
 if [ -n "$1" ]
