@@ -2,7 +2,7 @@
 
 function deployHealthchecks(){
   export $(grep -v '^#' healthchecks.env | xargs)
-  make healthchecks
+  make healthchecks > healthcheck.deploy.log 2> healthcheck.deploy.log
 }
 
 function deployNginx(){

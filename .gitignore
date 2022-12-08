@@ -6,3 +6,4 @@ hc.sqlite
 hc/local_settings.py
 static-collected
 healthchecks.env
+*.log
