@@ -16,7 +16,7 @@ healthchecks-superuser:
 	sleep 10 && \
   docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py \
 	shell -c \
-	"from django.contrib.auth.models import User; User.objects.create_superuser('admin', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
+	"from django.contrib.auth.models import User; User.objects.create_superuser('${DJANGO_USERNAME}', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
 
 healthchecks-clean:
 	make healthchecks-env && \
