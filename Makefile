@@ -7,7 +7,7 @@ healthchecks-env:
 	cd healthchecks && \
 	git submodule init && \
 	git submodule update && \
-	cd ..
+	cd .. && \
 	cp healthchecks.env healthchecks/docker/.env
 	
 healthchecks-superuser:
