@@ -1,22 +1,26 @@
-.PHONY: nginx healthchecks all healthchecks-superuser
+.PHONY: nginx healthchecks all healthchecks-superuser healthchecks-env
 
 all:
 	make nginx && make registry && make healthchecks
 
-healthchecks:
+healthchecks-env:
 	export $(cat healthchecks.env | xargs) && \
-	echo "HERE" && ls -al && \
-	cp healthchecks.env healthchecks/docker/.env && \
+	cp healthchecks.env healthchecks/docker/.env
+	
+healthchecks:
+	make healthchecks-env && \
 	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
 	make healthchecks-superuser
 
 healthchecks-superuser:
+	make healthchecks-env && \
 	sleep 10 && \
   docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py \
 	shell -c \
 	"from django.contrib.auth.models import User; User.objects.create_superuser('admin', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
 
 healthchecks-clean:
+	make healthchecks-env && \
 	docker compose -f healthchecks/docker/docker-compose.yml down -v && \
 	make healthchecks
 
