@@ -5,6 +5,7 @@ all:
 
 healthchecks:
 	export $(cat healthchecks.env | xargs) && \
+	echo "HERE" && ls -al && \
 	cp healthchecks.env healthchecks/docker/.env && \
 	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
 	make healthchecks-superuser
