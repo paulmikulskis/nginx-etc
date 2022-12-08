@@ -21,5 +21,6 @@ jobs:
           key: ${{ secrets.DEPLOY_HOST_SSH_KEY }}
           envs: HEALTHCHECKS_ENV
           script: |
+            if cd nginx-etc; then git pull; else git clonegit@github.com:paulmikulskis/nginx-etc.git && cd nginx-etc; fi
             ./deploy.sh healthchecks
             
