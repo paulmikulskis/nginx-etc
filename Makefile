@@ -4,13 +4,14 @@ all:
 	make install && make registry && make healthchecks
 
 healthchecks:
+	export $(cat healthchecks.env | xargs) && \
 	cp healthchecks.env healthchecks/docker/.env && \
 	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
 	make healthchecks-superuser
 
 healthchecks-superuser:
 	sleep 10 && \
-  docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('paul', 'mikulskisp@gmail.com', '1234count!' )"
+  docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
 
 healthchecks-clean:
 	docker compose -f healthchecks/docker/docker-compose.yml down -v && \
