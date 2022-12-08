@@ -4,7 +4,6 @@ all:
 	make nginx && make registry && make healthchecks
 
 healthchecks-env:
-	export $(cat healthchecks.env | xargs) && \
 	cp healthchecks.env healthchecks/docker/.env
 	
 healthchecks:

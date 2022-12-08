@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function deployHealthchecks(){
+  export $(cat healthchecks.env | xargs)
   make healthchecks
 }
 
