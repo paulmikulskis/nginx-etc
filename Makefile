@@ -10,17 +10,16 @@ healthchecks-env:
 	cd ..
 	cp healthchecks.env healthchecks/docker/.env
 	
-healthchecks:
-	make healthchecks-env && \
-	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
-	make healthchecks-superuser
-
 healthchecks-superuser:
-	make healthchecks-env && \
-	sleep 10 && \
   docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py \
 	shell -c \
 	"from django.contrib.auth.models import User; User.objects.create_superuser('${DJANGO_USERNAME}', '${DJANGO_EMAIL}', '${DJANGO_PASSWORD}' )"
+
+healthchecks:
+	make healthchecks-env && \
+	docker compose -f healthchecks/docker/docker-compose.yml up -d && \
+	sleep 10 && \
+	make healthchecks-superuser
 
 healthchecks-clean:
 	make healthchecks-env && \
