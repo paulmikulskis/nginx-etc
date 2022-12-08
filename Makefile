@@ -1,5 +1,10 @@
-.PHONY: install
+.PHONY: install healthchecks all
 
+all:
+	make install && make registry && make healthchecks
+
+healthchecks:
+	cd healthchecks && docker compose up -d
 
 install:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
