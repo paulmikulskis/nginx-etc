@@ -22,5 +22,6 @@ jobs:
           envs: HEALTHCHECKS_ENV
           script: |
             if cd nginx-etc; then git pull; else git clone git@github.com:paulmikulskis/nginx-etc.git && cd nginx-etc; fi
+            echo "$HEALTHCHECKS_ENV" > healthchecks.env
             ./deploy.sh healthchecks
             
