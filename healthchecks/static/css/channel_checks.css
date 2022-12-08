@@ -1,8 +1,0 @@
-.channel-checks-table td:first-child, .channel-checks-table th:first-child {
-    padding-left: 16px;
-}
-
-.channel-checks-table .unnamed {
-    color: #999;
-    font-style: italic;
-}
