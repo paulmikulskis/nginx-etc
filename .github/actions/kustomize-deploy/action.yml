@@ -1,0 +1,73 @@
+name: 'kustomize-deploy'
+description: 'Kustomize Deployment'
+inputs:
+  cluster:
+    description: "Name of the EKS cluster"
+    required: true
+  manifests:
+    description: 'Directory of k8s manifest to deploy'
+    required: true
+  imageName:
+    description: "Image Name to swap out with new image url (sometimes the same name as the repo)"
+    required: true
+  serviceName:
+    description: "Service name, used to prune any orphaned resources (old configs, secrets, replicasets)"
+    required: true
+  imageUrl:
+    description: 'Full repository image path <ecr-host>/<repo>:<image-tag>'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Kustomize Deployment
+      run: |
+        set -eo pipefail
+        AWS_EKS_CLUSTER="${{ inputs.cluster }}"
+        MANIFESTS_DIR="${{ inputs.manifests }}"
+        IMAGE_NAME="${{ inputs.imageName }}"
+        SERVICE_NAME="${{ inputs.serviceName }}"
+        IMAGE_URL="${{ inputs.imageUrl }}"
+        KUSTOMIZE_FILE="kustomization"
+        
+        # check dir and if it exists
+        if [ -z "$MANIFESTS_DIR" ]; then
+          echo "No manifests provided"
+          exit 1
+        else 
+          if [ ! -d "$MANIFESTS_DIR" ]; then
+            echo "Manifests directory does not exist"
+            exit 1
+          fi
+        fi
+        
+        # check image name
+        if [ -z "$IMAGE_NAME" ]; then
+          echo "No image name provided"
+          exit 1
+        fi
+        
+        # check image url
+        if [ -z "$IMAGE_URL" ]; then
+          echo "No image url provided"
+          exit 1
+        fi
+
+        # check cluster
+        if [ -z "$AWS_EKS_CLUSTER" ]; then
+          echo "No eks cluster provided"
+          exit 1
+        fi
+        
+        # update kubeconfig to selected cluster
+        aws eks update-kubeconfig --name "$AWS_EKS_CLUSTER"
+        
+        #check if this is kustomize or ncipollo/release-action 
+        if [[ -f "$MANIFESTS_DIR/$KUSTOMIZE_FILE.yaml" || -f "$MANIFESTS_DIR/$KUSTOMIZE_FILE.yml" ]]; then
+            $(cd $MANIFESTS_DIR && kustomize edit set image $IMAGE_NAME=$IMAGE_URL)
+            kubectl apply -k $MANIFESTS_DIR
+        else 
+            echo "basic kubectl deploys are not supported yet, please use kustomize"
+            exit 1
+        fi
+      shell: bash

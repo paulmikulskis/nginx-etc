@@ -1,0 +1,25 @@
+name: production deploy of Healthchecks
+on:
+  push:
+    branches:
+      - master
+jobs:
+  Deploy:
+    name:  Deploy Dedicated - reliablesite.net
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2.3.4
+
+      - name: SSH into dedicated host docker run
+        uses: appleboy/ssh-action@master
+        env:
+          HEALTHCHECKS_ENV: ${{ secrets.HEALTHCHECKS_ENV }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEDI_DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_HOST_SSH_KEY }}
+          envs: HEALTHCHECKS_ENV
+          script: |
+            ./deploy.sh healthchecks
+            

@@ -1,0 +1,57 @@
+name: 'docker-build-with-args-and-push'
+description: 'Docker build with args and push'
+inputs:
+  context:
+    description: 'Docker context'
+    required: false
+    default: '.'
+  image-name-override:
+    description: 'Override the assumed image name (repository name)'
+    required: false
+    default: ''
+  release-version:
+    description: 'Release Tag used for Image'
+    required: true
+outputs:
+  imageName:
+    description: "image name"
+    value: ${{ steps.normalize-repo.outputs.repository-name }}
+  imageUrl:
+    description: "ECR Image URL"
+    value: ${{ steps.login-ecr.outputs.registry }}/${{ steps.normalize-repo.outputs.repository-name }}:${{ inputs.release-version }}
+runs:
+  using: "composite"
+  steps:
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Normalize repository string
+      id: normalize-repo
+      shell: bash
+      run: |
+        # set override first
+        ECR_REPO_NAME="${{ inputs.image-name-override }}"
+
+        # if override is empty, pull from git repo string
+        if [ -z "$ECR_REPO_NAME" ]; then
+          #lowecase the repo string
+          IN="=${REPO,,}" 
+          # split on the '/' - REPO is always <org>/<repo> 
+          arrREPO=(${IN//// }) 
+          ECR_REPO_NAME="${arrREPO[1]}"
+        fi  
+
+        # assign repo name to github env
+        echo "::set-output name=repository-name::$(echo ${ECR_REPO_NAME})"
+      env:
+        REPO: '${{ github.repository }}'
+    - uses: docker/setup-buildx-action@v1
+    - name: Build and push image
+      id: docker-build-and-push
+      uses: docker/build-push-action@v2
+      with:
+        context: ${{ inputs.context }}
+        build-args: "VERSION_TAG=${{ inputs.release-version }}"
+        build: ${{ github.event_name == 'pull_request' }}
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.login-ecr.outputs.registry }}/${{ steps.normalize-repo.outputs.repository-name }}:${{ inputs.release-version }}
