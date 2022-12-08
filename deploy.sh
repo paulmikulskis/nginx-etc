@@ -2,6 +2,7 @@
 
 function deployHealthchecks(){
   export $(grep -v '^#' healthchecks.env | xargs)
+  # will only matter if builind docker image from scratch
   cp logo.png healthchecks/static/img/logo.png
   make healthchecks > healthcheck.deploy.log 2> healthcheck.deploy.log
   exit 0
