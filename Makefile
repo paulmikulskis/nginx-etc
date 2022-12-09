@@ -17,7 +17,7 @@ healthchecks-superuser:
 
 healthchecks:
 	make healthchecks-env && \
-	docker compose -f healthchecks/docker/docker-compose.yml up -ENV_DOCKER_REGISTRY_HOST
+	docker compose -f healthchecks/docker/docker-compose.yml up -d --force-recreate
 
 healthchecks-clean:
 	make healthchecks-env && \
