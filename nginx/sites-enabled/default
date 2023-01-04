@@ -163,9 +163,9 @@ server {
 
                 proxy_set_header Host $http_host;
                 proxy_set_header X-NginX-Proxy true;
-
+                proxy_redirect off;
                 proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
-                proxy_pass http://localhost:666;
+                proxy_pass http://localhost:666/api/;
         }
 
         location / {
@@ -176,7 +176,7 @@ server {
 
                 proxy_set_header Host $http_host;
                 proxy_set_header X-NginX-Proxy true;
-
+                proxy_redirect off;
                 proxy_set_header Upgrade $http_upgrade;
                 proxy_set_header Connection "upgrade";
 
