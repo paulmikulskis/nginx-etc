@@ -26,6 +26,10 @@ then
   then
     echo "deploying healthchecks"
     deployHealthchecks
+  elif [ $1 = "infisical" ]
+  then
+    echo "deploying Infisical"
+    deployInfisical
   elif [ $1 = "nginx" ]
   then
     echo "deploying NGINX"
