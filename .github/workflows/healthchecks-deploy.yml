@@ -1,5 +1,6 @@
 name: production deploy of Healthchecks
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
