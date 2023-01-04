@@ -139,6 +139,54 @@ server {
 }
 
 server {
+        listen 443 ssl http2;
+        listen [::]:443 ssl http2;
+        # listen 80 default_server;
+        # listen [::]:80 default_server;
+        server_name secrets.yungstentech.com;
+        ssl_certificate      /etc/letsencrypt/live/yungstentech.com/fullchain.pem;
+        ssl_certificate_key  /etc/letsencrypt/live/yungstentech.com/privkey.pem;
+
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 10m;
+	client_max_body_size 3000M;
+        
+        location '/.well-known/acme-challenge' {
+                client_max_body_size 3000M;
+                default_type "text/plain";
+                root /var/www/html;
+        }
+        
+        location / {
+                include /etc/nginx/mime.types;
+
+                proxy_set_header X-Real-RIP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+                proxy_set_header Host $http_host;
+                proxy_set_header X-NginX-Proxy true;
+
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+                proxy_redirect off;
+
+                proxy_pass http://localhost:666;
+        }
+        location /api {
+                proxy_set_header X-Real-RIP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+                proxy_set_header Host $http_host;
+                proxy_set_header X-NginX-Proxy true;
+
+                proxy_redirect off;
+
+                proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
+                proxy_pass http://localhost:666/api;
+        }
+}
+
+server {
         listen 443;
         server_name registryui.yungstentech.com;
         ssl on;

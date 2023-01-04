@@ -1,7 +1,7 @@
-.PHONY: nginx healthchecks all healthchecks-superuser healthchecks-env
+.PHONY: nginx healthchecks all healthchecks-superuser healthchecks-env infisical infisical-env
 
 all:
-	make nginx && make registry && make healthchecks
+	make nginx && make registry && make healthchecks && make infisical
 
 healthchecks-env:
 	cd healthchecks && \
@@ -18,6 +18,13 @@ healthchecks-superuser:
 healthchecks:
 	make healthchecks-env && \
 	docker compose -f healthchecks/docker/docker-compose.yml up -d --force-recreate
+
+infisical-env:
+	cp infisical.env infisical/.env
+
+infisical:
+	make infisical-env && \
+	docker compose --env-file infisical.env -f infisical/docker-compose.yml up -d --force-recreate
 
 healthchecks-clean:
 	make healthchecks-env && \

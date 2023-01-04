@@ -1,4 +1,4 @@
-name: production deploy of Healthchecks
+name: production deploy of Infisical
 on:
   push:
     branches:
@@ -14,13 +14,13 @@ jobs:
       - name: SSH into dedicated host docker run
         uses: appleboy/ssh-action@master
         env:
-          HEALTHCHECKS_ENV: ${{ secrets.HEALTHCHECKS_ENV }}
+          HEALTHCHECKS_ENV: ${{ secrets.INFISICAL_ENV }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEDI_DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_HOST_SSH_KEY }}
-          envs: HEALTHCHECKS_ENV
+          envs: INFISICAL_ENV
           script: |
             if cd nginx-etc; then git pull; else git clone git@github.com:paulmikulskis/nginx-etc.git && cd nginx-etc; fi
-            echo "$HEALTHCHECKS_ENV" > healthchecks.env
-            ./deploy.sh healthchecks
+            echo "$INFISICAL_ENV" > infisical/.env
+            ./deploy.sh infisical

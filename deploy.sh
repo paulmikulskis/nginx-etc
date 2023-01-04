@@ -8,6 +8,13 @@ function deployHealthchecks(){
   exit 0
 }
 
+function deployInfisical(){
+  export $(grep -v '^#' infisical.env | xargs)
+  # will only matter if builind docker image from scratch
+  make infisical > infisical.deploy.log 2> infisical.deploy.log
+  exit 0
+}
+
 function deployNginx(){
   make nginx
   exit 0
