@@ -172,18 +172,18 @@ server {
 
                 proxy_pass http://localhost:666;
         }
-        location /api {
-                proxy_set_header X-Real-RIP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # location /api {
+        #         proxy_set_header X-Real-RIP $remote_addr;
+        #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-                proxy_set_header Host $http_host;
-                proxy_set_header X-NginX-Proxy true;
+        #         proxy_set_header Host $http_host;
+        #         proxy_set_header X-NginX-Proxy true;
 
-                proxy_redirect off;
+        #         proxy_redirect off;
 
-                proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
-                proxy_pass http://localhost:666/api;
-        }
+        #         proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
+        #         proxy_pass http://localhost:666/api;
+        # }
 }
 
 server {
