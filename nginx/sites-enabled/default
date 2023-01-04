@@ -164,8 +164,8 @@ server {
                 proxy_set_header Host $http_host;
                 proxy_set_header X-NginX-Proxy true;
                 proxy_redirect off;
-                proxy_cookie_path / "/; secure; HttpOnly; SameSite=strict";
-                proxy_pass http://localhost:666/api/;
+                proxy_cookie_path / "/;";
+                proxy_pass http://localhost:666;
         }
 
         location / {
