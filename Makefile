@@ -1,4 +1,4 @@
-.PHONY: nginx healthchecks all healthchecks-superuser healthchecks-env infisical infisical-env
+.PHONY: nginx healthchecks all healthchecks-superuser healthchecks-env infisical infisical-env posty posty-frontend posty-api
 
 all:
 	make nginx && make registry && make healthchecks && make infisical
