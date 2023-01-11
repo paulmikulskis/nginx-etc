@@ -118,11 +118,6 @@ server {
                 proxy_pass http://127.0.0.1:1198;
                 proxy_set_header Host $host;
         }
-
-        location /graphql/ws {
-                proxy_pass wss://127.0.0.1:1198;
-                proxy_set_header Host $host;
-        }
 }
 
 server {
@@ -144,11 +139,6 @@ server {
         
         location /graphql {
                 proxy_pass http://127.0.0.1:1199;
-                proxy_set_header Host $host;
-        }
-
-        location /graphql/ws {
-                proxy_pass wss://127.0.0.1:1199;
                 proxy_set_header Host $host;
         }
 }
