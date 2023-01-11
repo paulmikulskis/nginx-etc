@@ -9,3 +9,4 @@ healthchecks.env
 *.log
 hoppscotch/node_modules
 node_modules
+post-backend-config

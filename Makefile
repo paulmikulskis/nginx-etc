@@ -39,7 +39,7 @@ posty:
 posty-frontend:
 	docker run --rm --name posty -p 1199:3000 registry.yungstentech.com/posty:latest
 posty-backend:
-	docker run --rm --name posty-api -p 1198:3000 registry.yungstentech.com/posty-api:latest
+	docker run --rm --name posty-api -p 1198:1198 -v "$(pwd)"/post-backend-config:/etc/api-config registry.yungstentech.com/posty-api:latest
 
 nginx:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
