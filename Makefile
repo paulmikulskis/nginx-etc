@@ -9,7 +9,8 @@ healthchecks-env:
 	git submodule update && \
 	cd .. && \
 	cp healthchecks.env healthchecks/docker/.env
-	
+
+# if deploying healthchecks and there is no superuser, make a superuser
 healthchecks-superuser:
 	docker compose -f healthchecks/docker/docker-compose.yml run web ./manage.py \
 	shell -c \
@@ -32,6 +33,13 @@ healthchecks-clean:
 	make healthchecks && \
 	sleep 10 && \
 	make healthchecks-superuser
+
+posty:
+	make posty-backend && make posty-frontend
+posty-frontend:
+	docker run --rm --name posty -p 1199:3000 registry.yungstentech.com/posty:latest
+posty-backend:
+	docker run --rm --name posty-api -p 1198:3000 registry.yungstentech.com/posty-api:latest
 
 nginx:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
