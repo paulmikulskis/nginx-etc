@@ -37,9 +37,9 @@ healthchecks-clean:
 posty:
 	make posty-backend && make posty-frontend
 posty-frontend:
-	docker run --name posty -d -p 1199:3000 registry.yungstentech.com/posty-frontend:latest
+	docker run --rm --name posty -d -p 1199:3000 registry.yungstentech.com/posty-frontend:latest
 posty-api:
-	docker run --name posty-api -d -p 1198:1198 -v "${ROOT_DIR}"/../posty-backend-config:/etc/api-config registry.yungstentech.com/posty-api:latest
+	docker run --rm --name posty-api -d -p 1198:1198 -v "${ROOT_DIR}"/../posty-backend-config:/etc/api-config registry.yungstentech.com/posty-api:latest
 
 nginx:
 	sudo cp -r nginx/ /etc && sudo systemctl restart nginx && sudo systemctl status nginx
