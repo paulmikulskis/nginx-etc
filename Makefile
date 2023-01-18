@@ -61,3 +61,5 @@ registry:
 		-p 8080:80 \
 		konradkleine/docker-registry-frontend:v2
 		
+loki:
+	docker run --name loki -d -v $(pwd)/loki:/mnt/config -p 3100:3100 grafana/loki:2.7.0 -config.file=/mnt/config/loki-config.yaml
